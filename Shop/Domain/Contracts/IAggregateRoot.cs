@@ -1,4 +1,4 @@
-namespace Shop.Domain.Interfaces;
+namespace Shop.Domain.Contracts;
 
 public interface IAggregateRoot
 {

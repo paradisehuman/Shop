@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Shop.Domain.Entities;
+using Shop.Domain.Events;
 
 namespace Shop.Infrastructure.DataAccess;
 
@@ -17,6 +18,9 @@ public class ShopDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
+        modelBuilder.Ignore<DomainEvent>();
+        
         modelBuilder.Entity<Product>()
             .OwnsOne(p => p.Price, p => { p.Property(x => x.Value).HasColumnName("Price").IsRequired(); });
         
@@ -39,6 +43,11 @@ public class ShopDbContext : DbContext
 
         modelBuilder.Entity<Discount>()
             .Property(d => d.Title)
+            .HasMaxLength(100)
+            .IsRequired();
+        
+        modelBuilder.Entity<Customer>()
+            .Property(c => c.FirstName)
             .HasMaxLength(100)
             .IsRequired();
 

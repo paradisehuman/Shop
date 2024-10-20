@@ -1,3 +1,6 @@
+using Shop.Domain.Events;
+using Shop.Domain.Events.Customer;
+
 namespace Shop.Domain.Entities;
 
 public class Customer
@@ -11,6 +14,21 @@ public class Customer
     {
         Id = Guid.NewGuid();
         FirstName = firstName;
+        
+        AddDomainEvent(new CustomerCreatedEvent(this));
+    }
+    
+    private readonly List<DomainEvent> _domainEvents = [];
+    public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+    
+    protected void AddDomainEvent(DomainEvent eventItem)
+    {
+        _domainEvents.Add(eventItem);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
     }
 }
 
