@@ -1,4 +1,4 @@
-using Shop.Domain.Interfaces;
+using Shop.Domain.Contracts;
 
 namespace Shop.Domain.Entities;
 
