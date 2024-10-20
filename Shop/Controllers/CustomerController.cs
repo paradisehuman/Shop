@@ -8,7 +8,7 @@ namespace Shop.Controllers;
 public class CustomerController(ICustomerService customerService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> AddCustomers(string firstName)
+    public async Task<IActionResult> AddCustomer(string firstName)
     {
         await customerService.CreateCustomerAsync(firstName);
         return Ok();

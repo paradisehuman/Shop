@@ -2,7 +2,7 @@ using MassTransit;
 
 namespace Shop.Domain.Events.Customer;
 
-public class CustomerCreatedEventHandler : IConsumer<CustomerCreatedEvent>
+public class CustomerCreatedEventConsumer : IConsumer<CustomerCreatedEvent>
 {
     public async Task Consume(ConsumeContext<CustomerCreatedEvent> context)
     {

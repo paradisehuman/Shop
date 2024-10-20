@@ -7,6 +7,7 @@ using Shop.Application.Contracts;
 using Shop.Application.Services;
 using Shop.Domain.Contracts;
 using Shop.Domain.Events.Customer;
+using Shop.Domain.Events.Product;
 using Shop.Infrastructure;
 using Shop.Infrastructure.Contracts;
 using Shop.Infrastructure.DataAccess;
@@ -28,7 +29,9 @@ builder.Services.AddDbContext<ShopDbContext>(options =>
 builder.Services.AddScoped<IDomainEventDispatcher, RabbitMqDomainEventDispatcher>();
 
 builder.Services.AddScoped<ICustomerService, CustomerService>()
-    .AddScoped<ICustomerRepository, CustomerRepository>();
+    .AddScoped<ICustomerRepository, CustomerRepository>()
+    .AddScoped<IProductService, ProductService>()
+    .AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -36,7 +39,9 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        x.AddConsumer<CustomerCreatedEventHandler>();
+        x.AddConsumer<CustomerCreatedEventConsumer>();
+        x.AddConsumer<ProductCreatedEventConsumer>();
+        x.AddConsumer<ProductStockUpdatedEventConsumer>();
         
         var rabbitMqOptions = builder.Configuration.GetSection("RabbitMqOptions").Get<RabbitMqOptions>();
         
@@ -58,8 +63,18 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint("customer-created-event-queue", ep =>
         {
             ep.Durable = true;
-            ep.ConfigureConsumer<CustomerCreatedEventHandler>(context);
+            ep.ConfigureConsumer<CustomerCreatedEventConsumer>(context);
             ep.UseMessageRetry(r => r.Interval(3, TimeSpan.FromSeconds(5)));
+        });
+        
+        cfg.ReceiveEndpoint("product-created-event-queue", ep =>
+        {
+            ep.ConfigureConsumer<ProductCreatedEventConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("product-stock-updated-event-queue", ep =>
+        {
+            ep.ConfigureConsumer<ProductStockUpdatedEventConsumer>(context);
         });
         
     });
