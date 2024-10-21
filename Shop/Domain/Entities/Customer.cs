@@ -12,7 +12,6 @@ public class Customer
 
     public Customer(string firstName)
     {
-        Id = Guid.NewGuid();
         FirstName = firstName;
         
         AddDomainEvent(new CustomerCreatedEvent(this));

@@ -35,6 +35,9 @@ public class ShopDbContext : DbContext
             .HasMany(b => b.Items)
             .WithOne()
             .HasForeignKey("BasketId");
+        
+        modelBuilder.Entity<BasketItem>()
+            .OwnsOne(p => p.Price, p => { p.Property(x => x.Value).HasColumnName("Price").IsRequired(); });
 
         modelBuilder.Entity<Basket>()
             .HasOne(b => b.Discount)

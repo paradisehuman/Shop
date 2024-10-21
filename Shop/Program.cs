@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Shop.Application.Contracts;
 using Shop.Application.Services;
 using Shop.Domain.Contracts;
+using Shop.Domain.Events.Basket;
 using Shop.Domain.Events.Customer;
 using Shop.Domain.Events.Product;
 using Shop.Infrastructure;
@@ -31,7 +32,9 @@ builder.Services.AddScoped<IDomainEventDispatcher, RabbitMqDomainEventDispatcher
 builder.Services.AddScoped<ICustomerService, CustomerService>()
     .AddScoped<ICustomerRepository, CustomerRepository>()
     .AddScoped<IProductService, ProductService>()
-    .AddScoped<IProductRepository, ProductRepository>();
+    .AddScoped<IProductRepository, ProductRepository>()
+    .AddScoped<IBasketService, BasketService>()
+    .AddScoped<IBasketRepository, BasketRepository>();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -42,6 +45,10 @@ builder.Services.AddMassTransit(x =>
         x.AddConsumer<CustomerCreatedEventConsumer>();
         x.AddConsumer<ProductCreatedEventConsumer>();
         x.AddConsumer<ProductStockUpdatedEventConsumer>();
+        x.AddConsumer<BasketCreatedEventConsumer>();
+        x.AddConsumer<BasketItemAddedEventConsumer>();
+        x.AddConsumer<BasketItemRemovedEventConsumer>();
+        x.AddConsumer<DiscountAppliedEventConsumer>();
         
         var rabbitMqOptions = builder.Configuration.GetSection("RabbitMqOptions").Get<RabbitMqOptions>();
         
@@ -75,6 +82,26 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint("product-stock-updated-event-queue", ep =>
         {
             ep.ConfigureConsumer<ProductStockUpdatedEventConsumer>(context);
+        });
+        
+        cfg.ReceiveEndpoint("basket-created-event-queue", ep =>
+        {
+            ep.ConfigureConsumer<BasketCreatedEventConsumer>(context);
+        });
+        
+        cfg.ReceiveEndpoint("basket-item-added-event-queue", ep =>
+        {
+            ep.ConfigureConsumer<BasketItemAddedEventConsumer>(context);
+        });
+        
+        cfg.ReceiveEndpoint("basket-item-removed-event-queue", ep =>
+        {
+            ep.ConfigureConsumer<BasketItemRemovedEventConsumer>(context);
+        });
+        
+        cfg.ReceiveEndpoint("discount-applied-event-queue", ep =>
+        {
+            ep.ConfigureConsumer<DiscountAppliedEventConsumer>(context);
         });
         
     });
