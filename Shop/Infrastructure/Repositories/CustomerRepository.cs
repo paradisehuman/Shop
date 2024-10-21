@@ -5,28 +5,19 @@ using Shop.Infrastructure.DataAccess;
 
 namespace Shop.Infrastructure.Repositories;
 
-public class CustomerRepository : ICustomerRepository
+public class CustomerRepository(ShopDbContext dbContext, IDomainEventDispatcher dispatcher) : ICustomerRepository
 {
-    private readonly ShopDbContext _dbContext;
-    private readonly IDomainEventDispatcher _dispatcher;
-
-    public CustomerRepository(ShopDbContext dbContext, IDomainEventDispatcher dispatcher)
-    {
-        _dbContext = dbContext;
-        _dispatcher = dispatcher;
-    }
-
     public async Task SaveAsync(Customer customer)
     {
-        _dbContext.Customers.Add(customer);
+        dbContext.Customers.Add(customer);
         
         foreach (var domainEvent in customer.DomainEvents)
         {
-            await _dispatcher.Dispatch(domainEvent);
+            await dispatcher.Dispatch(domainEvent);
         }
 
         customer.ClearDomainEvents();
         
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 }

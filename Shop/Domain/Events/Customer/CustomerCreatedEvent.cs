@@ -1,11 +1,6 @@
 namespace Shop.Domain.Events.Customer;
 
-public class CustomerCreatedEvent : DomainEvent
+public class CustomerCreatedEvent(Entities.Customer customer) : DomainEvent
 {
-    public Entities.Customer Customer { get; }
-
-    public CustomerCreatedEvent(Entities.Customer customer)
-    {
-        Customer = customer;
-    }
+    public Entities.Customer Customer { get; } = customer;
 }
