@@ -18,7 +18,6 @@ public class Product
 
     public Product(string picture, string title, string description, Price price, int initialStock)
     {
-        Id = Guid.NewGuid();
         Picture = picture;
         Title = title;
         Description = description;
