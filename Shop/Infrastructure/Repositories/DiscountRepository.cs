@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shop.Domain.Contracts;
 using Shop.Domain.Entities;
+using Shop.Domain.Enums;
 using Shop.Infrastructure.DataAccess;
 
 namespace Shop.Infrastructure.Repositories;
@@ -13,15 +14,10 @@ public class DiscountRepository : IDiscountRepository
     {
         _dbContext = dbContext;
     }
-
-    public Discount? GetById(Guid id)
+    
+    public Discount? GetActiveByCustomerId(Guid customerId)
     {
-        return _dbContext.Discounts.Find(id);
-    }
-
-    public IEnumerable<Discount> GetByCustomerId(Guid customerId)
-    {
-        return _dbContext.Discounts.Where(d => d.CustomerId == customerId).ToList();
+        return _dbContext.Discounts.FirstOrDefault(d => d.CustomerId == customerId && d.Status == DiscountStatus.Active);
     }
 
     public async Task SaveAsync(Discount discount)

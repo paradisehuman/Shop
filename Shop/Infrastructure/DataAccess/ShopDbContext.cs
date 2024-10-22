@@ -55,6 +55,11 @@ public class ShopDbContext : DbContext
             .HasForeignKey(d => d.CustomerId)
             .IsRequired();
         
+        modelBuilder.Entity<Discount>()
+            .Property(d => d.Status)
+            .HasConversion<string>()
+            .IsRequired();
+        
         modelBuilder.Entity<Customer>()
             .Property(c => c.FirstName)
             .HasMaxLength(100)
