@@ -41,6 +41,10 @@ public class RabbitMqDomainEventDispatcher(IPublishEndpoint publishEndpoint) : I
             case DiscountAppliedEvent discountAppliedEvent:
                 await publishEndpoint.Publish(discountAppliedEvent);
                 break;
+            
+            case BasketCompletedEvent basketCompletedEvent:
+                await publishEndpoint.Publish(basketCompletedEvent);
+                break;
 
             default:
                 throw new InvalidOperationException("Unknown domain event type.");

@@ -5,9 +5,9 @@ namespace Shop.Domain.Events.Basket;
 public class DiscountAppliedEvent : DomainEvent
 {
     public Entities.Basket Basket { get; }
-    public Discount Discount { get; }
+    public Entities.Discount Discount { get; }
 
-    public DiscountAppliedEvent(Entities.Basket basket, Discount discount)
+    public DiscountAppliedEvent(Entities.Basket basket, Entities.Discount discount)
     {
         Basket = basket;
         Discount = discount;

@@ -27,4 +27,16 @@ public class BasketController(IBasketService basketService) : ControllerBase
         await basketService.RemoveItemFromBasketAsync(basketId, productId);
         return Ok();
     }
+
+    [HttpGet("get-basket-total-price")]
+    public ActionResult<decimal> GetBasketTotal(Guid basketId)
+    {
+        return Ok(basketService.GetBasketTotalPrice(basketId));
+    }
+    
+    [HttpGet("get-all-discounted-prices")]
+    public ActionResult<decimal> GetAllDiscountPrices()
+    {
+        return Ok(basketService.GetAllDiscountPrices());
+    }
 }

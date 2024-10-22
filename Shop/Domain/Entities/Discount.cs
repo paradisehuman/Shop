@@ -1,3 +1,5 @@
+using Shop.Domain.Events;
+using Shop.Domain.Events.Discount;
 using Shop.Domain.ValueObjects;
 
 namespace Shop.Domain.Entities;
@@ -5,20 +7,32 @@ namespace Shop.Domain.Entities;
 public class Discount
 {
     public Guid Id { get; private set; }
-    public Price Value { get; private set; }
+    public decimal Value { get; private set; }
     public string Title { get; private set; }
+    public Guid CustomerId { get; private set; }
+    public Customer Customer { get; private set; }
 
     private Discount() { } 
 
-    public Discount(Price value, string title)
+    public Discount(decimal value, string title, Guid customerId)
     {
         Value = value;
         Title = title;
+        CustomerId = customerId;
+        
+        AddDomainEvent(new DiscountCreatedEvent(this));
     }
 
-    public decimal CalculateDiscount(decimal total)
+    private readonly List<DomainEvent> _domainEvents = [];
+    public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+    protected void AddDomainEvent(DomainEvent eventItem)
     {
-        throw new NotImplementedException();
+        _domainEvents.Add(eventItem);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
     }
 }
 

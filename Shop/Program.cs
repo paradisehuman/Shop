@@ -8,6 +8,7 @@ using Shop.Application.Services;
 using Shop.Domain.Contracts;
 using Shop.Domain.Events.Basket;
 using Shop.Domain.Events.Customer;
+using Shop.Domain.Events.Discount;
 using Shop.Domain.Events.Product;
 using Shop.Infrastructure;
 using Shop.Infrastructure.Contracts;
@@ -34,7 +35,12 @@ builder.Services.AddScoped<ICustomerService, CustomerService>()
     .AddScoped<IProductService, ProductService>()
     .AddScoped<IProductRepository, ProductRepository>()
     .AddScoped<IBasketService, BasketService>()
-    .AddScoped<IBasketRepository, BasketRepository>();
+    .AddScoped<IBasketRepository, BasketRepository>()
+    .AddScoped<IDiscountRepository, DiscountRepository>()
+    .AddScoped<IDiscountService, DiscountService>()
+    .AddScoped<ICheckoutService, CheckoutService>()
+    .AddScoped<IOrderService, OrderService>()
+    .AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -49,6 +55,9 @@ builder.Services.AddMassTransit(x =>
         x.AddConsumer<BasketItemAddedEventConsumer>();
         x.AddConsumer<BasketItemRemovedEventConsumer>();
         x.AddConsumer<DiscountAppliedEventConsumer>();
+        x.AddConsumer<DiscountCreatedEventConsumer>();
+        x.AddConsumer<BasketCompletedEventConsumer>();
+        
         
         var rabbitMqOptions = builder.Configuration.GetSection("RabbitMqOptions").Get<RabbitMqOptions>();
         
@@ -102,6 +111,16 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint("discount-applied-event-queue", ep =>
         {
             ep.ConfigureConsumer<DiscountAppliedEventConsumer>(context);
+        });
+        
+        cfg.ReceiveEndpoint("discount-created-event-queue", ep =>
+        {
+            ep.ConfigureConsumer<DiscountCreatedEventConsumer>(context);
+        });
+        
+        cfg.ReceiveEndpoint("basket-completed-event-queue", ep =>
+        {
+            ep.ConfigureConsumer<BasketCompletedEventConsumer>(context);
         });
         
     });

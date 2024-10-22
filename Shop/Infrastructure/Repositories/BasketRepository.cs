@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shop.Domain.Contracts;
 using Shop.Domain.Entities;
+using Shop.Domain.Enums;
 using Shop.Infrastructure.Contracts;
 using Shop.Infrastructure.DataAccess;
 
@@ -19,7 +20,15 @@ public class BasketRepository : IBasketRepository
 
     public Basket? GetById(Guid id)
     {
-        return _dbContext.Baskets.Include(b => b.Items).ThenInclude(i => i.Product).FirstOrDefault(b => b.Id == id);
+        return _dbContext.Baskets.Include(b => b.Discount).Include(b => b.Items).ThenInclude(i => i.Product)
+            .FirstOrDefault(b => b.Id == id);
+    }
+
+    public IEnumerable<Basket> GetCompletedBaskets()
+    {
+        return _dbContext.Baskets.Include(b => b.Discount).Include(b => b.Items).ThenInclude(i => i.Product)
+            .Where(b=>b.Status == BasketStatus.Completed)
+            .ToList();
     }
 
     public async Task SaveAsync(Basket basket)
