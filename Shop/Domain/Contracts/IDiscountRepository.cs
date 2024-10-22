@@ -4,7 +4,6 @@ namespace Shop.Domain.Contracts;
 
 public interface IDiscountRepository
 {
-    Discount? GetById(Guid id);
-    IEnumerable<Discount> GetByCustomerId(Guid customerId);
+    Discount? GetActiveByCustomerId(Guid customerId);
     Task SaveAsync(Discount discount);
 }

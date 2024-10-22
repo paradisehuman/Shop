@@ -46,12 +46,12 @@ public class BasketService(
             throw new ArgumentException("Basket not found.");
         }
 
-        var discount = discountRepository.GetByCustomerId(customerId)
-            .FirstOrDefault();
+        var discount = discountRepository.GetActiveByCustomerId(customerId);
 
         if (discount != null)
         {
-            basket?.ApplyDiscount(discount);
+            basket.ApplyDiscount(discount);
+            discount.MarkAsUsed();
 
             await basketRepository.SaveAsync(basket!);
             await discountRepository.SaveAsync(discount);

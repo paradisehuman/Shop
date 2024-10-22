@@ -8,18 +8,18 @@ public class CheckoutService(IBasketService basketService, IOrderService orderSe
     public async Task CheckoutAsync(Guid basketId, Guid customerId)
     {
         var basket = basketService.GetBasket(basketId);
-   
-        if (basket?.Status != BasketStatus.Active)
+
+        if (basket?.Status != BasketStatus.Active || basket.Items.Count == 0)
         {
             throw new InvalidOperationException("Cannot complete a purchase for a non-active basket.");
         }
-        
+
         await basketService.ApplyDiscountToBasket(basketId, customerId);
-        
-        var finalPrice = basket?.TotalPrice;
-        
+
+        var finalPrice = basket.TotalPrice;
+
         await orderService.CreateOrderAsync(basket, finalPrice);
-        
+
         await basketService.CompletePurchase(basketId, customerId);
     }
 }
