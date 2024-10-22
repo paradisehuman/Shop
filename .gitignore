@@ -1,4 +1,6 @@
 Shop/obj/
 Shop/bin/
+Shop.Tests/bin/
+Shop.Tests/obj/
 .idea
 .dockerignore
