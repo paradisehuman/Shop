@@ -276,6 +276,38 @@ The project leverages **Dependency Injection (DI)** to promote loose coupling be
 │   └── Shop.csproj                 # Main project file
 └── README.md                       # Project documentation
 ```
+### Sprint History
+
+This project follows an agile development process using **sprints** to break down and manage work. Below is a summary of the completed sprints:
+
+1. **Sprint 1**: 
+   - Implemented the project’s infrastructure.
+   - Set up a **Swagger** documentation for the API.
+   - Initialized the GitHub repository with **GitHub Actions** for CI/CD.
+
+2. **Sprint 2**: 
+   - Designed the data models and database schema.
+   - Implemented the database for all microservices.
+
+3. **Sprint 3**: 
+   - Developed the core functionality for **Product** and **Customer**.
+   - **Bonus**: Added stock management for products.
+
+4. **Sprint 4**: 
+   - Implemented the **Basket** functionality, allowing customers to manage their shopping baskets.
+
+5. **Sprint 5**: 
+   - Developed the **Discount** functionality, allowing discounts to be applied to baskets.
+   - Added querying capabilities to retrieve discounts for baskets.
+
+6. **Sprint 6**: 
+   - Focused on writing **unit tests** and **integration tests** to ensure system reliability.
+
+7. **Sprint 7**: 
+   - Created documentation for the project, including this **README.md** and architecture decision records (ADRs).
+
+8. **Sprint 8**: 
+   - Implemented the **Order** functionality, enabling customers to complete purchases and process orders.
 
 ## Integration Tests
 
@@ -302,6 +334,53 @@ public async Task CheckoutFlow_Should_Create_Order_From_Basket()
 ## Contributing
 
 Feel free to fork this project and create pull requests. Contributions are always welcome!
+
+### Branching Strategy
+
+We follow the **Feature Branch Strategy** for managing code in this repository. This strategy ensures that development happens in isolation from the main branch and that features are merged back into the main branch once they are complete and tested.
+
+#### Workflow:
+
+1. **Create a new branch for each feature or fix:**
+
+   - When working on a new feature or fixing a bug, create a new branch from the `main` branch.
+   - Branch names should follow this convention: `feature/feature-name` or `fix/bug-fix-description`.
+
+   **Example:**
+
+   ```bash
+   git checkout -b feature/add-product-api
+   ```
+
+2. **Develop the feature:**
+
+   - Commit your changes to the feature branch. Ensure that each commit is atomic and meaningful.
+
+   **Example:**
+
+   ```bash
+   git commit -m "Add POST API for product creation"
+   ```
+
+3. **Push the feature branch:**
+
+   Once the feature is complete and has passed local testing, push the branch to the remote repository.
+
+   **Example:**
+
+   ```bash
+   git push origin feature/add-product-api
+   ```
+
+4. **Create a pull request (PR):**
+
+   - Open a pull request against the `main` branch once your feature is ready.
+   - Include a meaningful description and link to any related issues if applicable.
+   - Ensure the PR is reviewed and approved by at least one team member before merging.
+
+5. **Merge the pull request:**
+
+   After the pull request is approved and all tests pass, merge it into the `main` branch. The branch can then be deleted if it’s no longer needed.
 
 ## License
 
