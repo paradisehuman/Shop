@@ -49,13 +49,20 @@ public class ShopDbContext : DbContext
             .HasMaxLength(100)
             .IsRequired();
         
+        modelBuilder.Entity<Discount>()
+            .HasOne(d => d.Customer)
+            .WithMany() 
+            .HasForeignKey(d => d.CustomerId)
+            .IsRequired();
+        
         modelBuilder.Entity<Customer>()
             .Property(c => c.FirstName)
             .HasMaxLength(100)
             .IsRequired();
-
-
-        modelBuilder.Entity<Discount>().OwnsOne(p => p.Value,
-            p => { p.Property(x => x.Value).HasColumnName("Value").IsRequired(); });
+        
+        modelBuilder.Entity<Basket>()
+            .Property(b => b.Status)
+            .HasConversion<string>()
+            .IsRequired();
     }
 }
