@@ -37,7 +37,7 @@ public class Product
         Price = price;
         StockQuantity = stockQuantity;
     }
-    public void AddStock(int quantity)
+    public void IncreaseStock(int quantity)
     {
         if (quantity <= 0)
         {
@@ -61,6 +61,11 @@ public class Product
         StockQuantity -= quantity;
 
         AddDomainEvent(new ProductStockUpdatedEvent(this, -quantity));
+    }
+    
+    public bool IsInStock(int quantity)
+    {
+        return StockQuantity >= quantity;
     }
     
     private readonly List<DomainEvent> _domainEvents = [];
