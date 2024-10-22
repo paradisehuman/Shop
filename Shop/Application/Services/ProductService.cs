@@ -21,7 +21,7 @@ public class ProductService(IProductRepository productRepository) : IProductServ
             throw new ArgumentException("Product not found.");
         }
 
-        product.AddStock(quantity);
+        product.IncreaseStock(quantity);
         await productRepository.SaveAsync(product);
     }
 
@@ -35,5 +35,10 @@ public class ProductService(IProductRepository productRepository) : IProductServ
 
         product.ReduceStock(quantity);
         await productRepository.SaveAsync(product);
+    }
+
+    public Product? GetById(Guid id)
+    {
+        return productRepository.GetById(id);
     }
 }

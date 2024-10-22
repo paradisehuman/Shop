@@ -6,7 +6,7 @@ namespace Shop.Application.Services;
 
 public class BasketService(
     IBasketRepository basketRepository,
-    IProductRepository productRepository,
+    IProductService productService,
     IDiscountRepository discountRepository,
     IDiscountService discountService)
     : IBasketService
@@ -22,10 +22,18 @@ public class BasketService(
         var basket = basketRepository.GetById(basketId);
         if (basket == null) throw new ArgumentException("Basket not found.");
 
-        var product = productRepository.GetById(productId);
+        var product = productService.GetById(productId);
         if (product == null) throw new ArgumentException("Product not found.");
+        
+        if (!product.IsInStock(quantity))
+        {
+            throw new InvalidOperationException($"Insufficient stock for product {product.Title}");
+        }
+        
+        await productService.ReduceStockAsync(productId, quantity);
 
         basket.AddItem(product, quantity);
+        
         await basketRepository.SaveAsync(basket);
     }
 
@@ -33,8 +41,14 @@ public class BasketService(
     {
         var basket = basketRepository.GetById(basketId);
         if (basket == null) throw new ArgumentException("Basket not found.");
+        
+        var item = basket.Items.FirstOrDefault(i => i.Product.Id == productId);
+        if (item == null) throw new ArgumentException("Item not found in the basket.");
 
+        await productService.AddStockAsync(productId, item.Quantity);
+        
         basket.RemoveItem(productId);
+        
         await basketRepository.SaveAsync(basket);
     }
 
