@@ -1,3 +1,4 @@
+using Shop.Domain.Contracts;
 using Shop.Domain.Enums;
 using Shop.Domain.Events;
 using Shop.Domain.Events.Basket;
@@ -5,7 +6,7 @@ using Shop.Domain.ValueObjects;
 
 namespace Shop.Domain.Entities;
 
-public class Basket
+public class Basket: IAggregateRoot
 {
     public Guid Id { get; private set; }
     public List<BasketItem> Items { get; private set; } = [];
