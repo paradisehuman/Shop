@@ -101,9 +101,9 @@ This will run all tests, including integration tests that verify key functionali
 
 ### API Usage Guidance
 
-Follow these steps to interact with the e-commerce system using the provided API endpoints. This guide will walk you through adding a product, creating a customer, creating a basket, and completing a purchase with a discount.
+Follow these steps to interact with the e-commerce system using the provided API endpoints. This guide will walk you through adding a product, creating a customer, creating a basket, adding items to the basket, and completing a purchase with a discount.
 
-#### 1. **Add Product**
+### 1. **Add Product**
 
 To add a product, use the `/api/Product` endpoint with a `POST` request. Provide the product details such as picture, title, description, price, and stock.
 
@@ -127,11 +127,11 @@ POST /api/Product
 curl -X POST "http://localhost:5239/api/Product?picture=https://example.com/image.jpg&title=ProductTitle&description=Description&price=100&stock=10"
 ```
 
-#### 2. **Get the ProductId from the Database**
+### 2. **Get the ProductId from the Database**
 
-Once the product is added, retrieve the `ProductId` by querying the database directly. For simplicity, assume this can be done using an appropriate database query depending on your setup.
+Once the product is added, retrieve the `ProductId` by querying the database directly.
 
-#### 3. **Create a Customer**
+### 3. **Create a Customer**
 
 To create a new customer, use the `/api/Customer` endpoint with a `POST` request. Provide the customer’s first name as a parameter.
 
@@ -151,11 +151,11 @@ POST /api/Customer
 curl -X POST "http://localhost:5239/api/Customer?firstName=John"
 ```
 
-#### 4. **Get the CustomerId from the Database**
+### 4. **Get the CustomerId from the Database**
 
-After creating the customer, retrieve the `CustomerId` by querying the database. Again, this can be done using an appropriate query based on your database setup.
+After creating the customer, retrieve the `CustomerId` by querying the database.
 
-#### 5. **Create a Basket for the Customer**
+### 5. **Create a Basket for the Customer**
 
 To create a basket for the customer, use the `/api/Basket` endpoint with a `POST` request. Pass the `CustomerId` as a query parameter.
 
@@ -175,11 +175,33 @@ POST /api/Basket
 curl -X POST "http://localhost:5239/api/Basket?customerId=<CustomerId>"
 ```
 
-#### 6. **Get the BasketId from the Database**
+### 6. **Get the BasketId from the Database**
 
-After creating the basket, retrieve the `BasketId` from the database using a database query.
+After creating the basket, retrieve the `BasketId` from the database.
 
-#### 7. **Checkout the Basket by BasketId and CustomerId**
+### 7. **Add BasketItem**
+
+To add an item to the basket, use the `/api/Basket` endpoint with a `PUT` request. Provide the `BasketId`, `ProductId`, and `quantity` as query parameters.
+
+**Endpoint:**
+
+```
+PUT /api/Basket
+```
+
+**Parameters (query):**
+
+- `basketId`: The unique ID of the basket (UUID)
+- `productId`: The unique ID of the product (UUID)
+- `quantity`: The number of units of the product to add (integer, int32)
+
+**Example Request:**
+
+```bash
+curl -X PUT "http://localhost:5239/api/Basket?basketId=<BasketId>&productId=<ProductId>&quantity=2"
+```
+
+### 8. **Checkout the Basket by BasketId and CustomerId**
 
 To checkout the basket and complete the purchase, use the `/checkout` endpoint with a `POST` request. Provide the `BasketId` and `CustomerId` as query parameters.
 
@@ -200,11 +222,11 @@ POST /checkout
 curl -X POST "http://localhost:5239/checkout?basketId=<BasketId>&customerId=<CustomerId>"
 ```
 
-#### 8. **Repeat Steps 1 to 7 for the Second Purchase to Get a 5% Discount**
+### 9. **Repeat the Steps to Get a 5% Discount**
 
-Repeat steps 1 to 7 for a second product purchase using the same customer to receive a **5% discount** on the next purchase. Ensure that you follow the same flow and use the same `CustomerId` to accumulate the discount.
+Repeat steps 1 through 8 for a second purchase using the same customer to receive a **5% discount** on the next purchase. Ensure that you follow the same flow and use the same `CustomerId` to accumulate the discount.
 
-#### 9. **Get the Total Sum of Discounted Prices for All Customers**
+### 10. **Get the Sum of Discounted Prices for All Customers**
 
 To retrieve the sum of all discounted prices for all customers, use the `/api/Basket/get-all-discounted-prices` endpoint with a `GET` request.
 
