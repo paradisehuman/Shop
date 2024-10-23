@@ -1,14 +1,13 @@
 using MassTransit;
 
-namespace Shop.Domain.Events.Product;
+namespace Shop.Domain.Events.Stock;
 
 public class ProductStockUpdatedEventConsumer : IConsumer<ProductStockUpdatedEvent>
 {
     public async Task Consume(ConsumeContext<ProductStockUpdatedEvent> context)
     {
-        var product = context.Message.Product;
         var quantityChange = context.Message.QuantityChange;
-        Console.WriteLine($"Product stock updated: {product.Title}, Quantity Change: {quantityChange}");
+        Console.WriteLine($"Product stock updated, Quantity Change: {quantityChange}");
         await Task.CompletedTask;
     }
 }

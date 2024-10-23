@@ -7,12 +7,13 @@ namespace Shop.Application.Services;
 
 public class ProductService(IProductRepository productRepository) : IProductService
 {
-    public async Task CreateProductAsync(string picture, string title, string description, decimal price, int initialStock)
+    public async Task CreateProductAsync(string picture, string title, string description, decimal price,
+        int initialStock)
     {
-        var product = new Product(picture, title, description, new Price(price), initialStock);
+        var product = new Product(picture, title, description, new Price(price), new Stock(initialStock));
         await productRepository.SaveAsync(product);
     }
-    
+
     public async Task AddStockAsync(Guid productId, int quantity)
     {
         var product = productRepository.GetById(productId);
@@ -21,7 +22,7 @@ public class ProductService(IProductRepository productRepository) : IProductServ
             throw new ArgumentException("Product not found.");
         }
 
-        product.IncreaseStock(quantity);
+        product.Stock.IncreaseStock(quantity);
         await productRepository.SaveAsync(product);
     }
 
@@ -33,7 +34,7 @@ public class ProductService(IProductRepository productRepository) : IProductServ
             throw new ArgumentException("Product not found.");
         }
 
-        product.ReduceStock(quantity);
+        product.Stock.ReduceStock(quantity);
         await productRepository.SaveAsync(product);
     }
 

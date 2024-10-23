@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Shop.Application.Contracts;
+using Shop.Domain.Entities;
 
 namespace Shop.Controllers;
 

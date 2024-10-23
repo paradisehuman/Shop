@@ -2,6 +2,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Shop.Application.Services;
+using Shop.Domain.Entities;
 using Shop.Domain.Enums;
 using Shop.Domain.Events;
 using Shop.Infrastructure.Contracts;
@@ -72,7 +73,7 @@ public class CheckoutIntegrationTests
 
         // Ensure the product stock has decreased
         var updatedProduct = await _dbContext.Products.FindAsync(product.Id);
-        updatedProduct?.StockQuantity.Should().Be(8); // 10 - 2 = 8
+        updatedProduct?.Stock.Quantity.Should().Be(8); // 10 - 2 = 8
 
         // Ensure the basket is marked as completed
         var completedBasket = await _dbContext.Baskets.FindAsync(basket.Id);
