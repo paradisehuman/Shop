@@ -3,6 +3,7 @@ using Shop.Domain.Events;
 using Shop.Domain.Events.Basket;
 using Shop.Domain.Events.Customer;
 using Shop.Domain.Events.Product;
+using Shop.Domain.Events.Stock;
 using Shop.Infrastructure.Contracts;
 
 namespace Shop.Infrastructure;

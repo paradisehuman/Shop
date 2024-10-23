@@ -22,12 +22,11 @@ public class ShopDbContext : DbContext
         modelBuilder.Ignore<DomainEvent>();
         
         modelBuilder.Entity<Product>()
-            .OwnsOne(p => p.Price, p => { p.Property(x => x.Value).HasColumnName("Price").IsRequired(); });
+            .OwnsOne(p => p.Stock, p => { p.Property(x => x.Quantity).HasColumnName("Stock").IsRequired(); });
         
         modelBuilder.Entity<Product>()
-            .Property(p => p.StockQuantity)
-            .IsRequired(); 
-
+            .OwnsOne(p => p.Price, p => { p.Property(x => x.Value).HasColumnName("Price").IsRequired(); });
+        
         modelBuilder.Entity<BasketItem>()
             .HasKey(b => b.Id);
 
