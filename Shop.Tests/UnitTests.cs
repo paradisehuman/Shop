@@ -16,7 +16,7 @@ public class UnitTests
         var basketId = Guid.NewGuid();
         var productId = Guid.NewGuid();
         var customerId = Guid.NewGuid();
-        var product = new Product("Test Picture","Test Product", "Description", new Price(50m), 10);
+        var product = new Product("Test Picture","Test Product", "Description", new Price(50m), new Stock(10));
         var basket = new Basket(customerId);
         var mockBasketRepository = new Mock<IBasketRepository>();
         mockBasketRepository.Setup(x => x.GetById(basketId)).Returns(basket);
@@ -53,23 +53,23 @@ public class UnitTests
     public void ReduceStock_Should_DecreaseProductQuantity()
     {
         // Arrange
-        var product = new Product("Test Picture","Test Product", "Description", new Price(50m), 10);
+        var product = new Product("Test Picture","Test Product", "Description", new Price(50m), new Stock(10));
 
         // Act
-        product.ReduceStock(3);
+        product.Stock.ReduceStock(3);
 
         // Assert
-        product.StockQuantity.Should().Be(7); // 10 - 3 = 7
+        product.Stock.Quantity.Should().Be(7); // 10 - 3 = 7
     }
     
     [Fact]
     public void AddItemToBasket_Should_Throw_When_Stock_Insufficient()
     {
         // Arrange
-        var product = new Product("Test Picture","Test Product", "Description", new Price(50m), 2);
+        var product = new Product("Test Picture","Test Product", "Description", new Price(50m), new Stock(2));
 
         // Act & Assert
-        Assert.Throws<InvalidOperationException>(() => product.ReduceStock(3));
+        Assert.Throws<InvalidOperationException>(() => product.Stock.ReduceStock(3));
     }
     
     [Fact]

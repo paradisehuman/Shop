@@ -23,8 +23,15 @@ public class ProductRepository(ShopDbContext dbContext, IDomainEventDispatcher d
         {
             await dispatcher.Dispatch(domainEvent);
         }
+        
+        foreach (var domainEvent in product.Stock.DomainEvents)
+        {
+            await dispatcher.Dispatch(domainEvent);
+        }
 
         product.ClearDomainEvents();
+        product.Stock.ClearDomainEvents();
+        
         await dbContext.SaveChangesAsync();
     }
     

@@ -25,7 +25,7 @@ public class BasketService(
         var product = productService.GetById(productId);
         if (product == null) throw new ArgumentException("Product not found.");
         
-        if (!product.IsInStock(quantity))
+        if (!product.Stock.IsInStock(quantity))
         {
             throw new InvalidOperationException($"Insufficient stock for product {product.Title}");
         }

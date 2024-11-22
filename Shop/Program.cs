@@ -10,6 +10,7 @@ using Shop.Domain.Events.Basket;
 using Shop.Domain.Events.Customer;
 using Shop.Domain.Events.Discount;
 using Shop.Domain.Events.Product;
+using Shop.Domain.Events.Stock;
 using Shop.Infrastructure;
 using Shop.Infrastructure.Contracts;
 using Shop.Infrastructure.DataAccess;
